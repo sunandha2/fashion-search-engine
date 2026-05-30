@@ -29,7 +29,7 @@ print(f"\nColors:")
 print(df['baseColour'].value_counts().head(10))
 
 # Check how many images exist
-image_dir = 'data/images'
+image_dir = 'data/images/images'
 image_files = os.listdir(image_dir)
 print(f"\nTotal images available: {len(image_files)}")
 
