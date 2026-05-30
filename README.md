@@ -31,7 +31,7 @@ you need both meaning AND appearance.
 Categories: Apparel, Footwear, Accessories, Beauty
 
 ## Progress
-- [ ] Day 1 — Setup + dataset exploration
+- [x] Day 1 — 44,412 fashion products explored (Apparel, Footwear, Accessories)
 - [ ] Day 2 — Text embeddings + FAISS index
 - [ ] Day 3 — CLIP image embeddings + multimodal search
 - [ ] Day 4 — RAG styling recommendations
