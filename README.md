@@ -32,7 +32,7 @@ Categories: Apparel, Footwear, Accessories, Beauty
 
 ## Progress
 - [x] Day 1 — 44,412 fashion products explored (Apparel, Footwear, Accessories)
-- [ ] Day 2 — Text embeddings + FAISS index
+- [x] Day 2 — Sentence Transformer embeddings + FAISS index built (44,412 products, sub-millisecond search)
 - [ ] Day 3 — CLIP image embeddings + multimodal search
 - [ ] Day 4 — RAG styling recommendations
 - [ ] Day 5 — Streamlit app + deployment
