@@ -3,7 +3,11 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 import torch
-from transformers import CLIPProcessor, CLIPModel
+try:
+    from transformers import CLIPProcessor, CLIPModel
+    CLIP_AVAILABLE = True
+except ImportError:
+    CLIP_AVAILABLE = False
 from sentence_transformers import SentenceTransformer
 import faiss
 import os
@@ -34,12 +38,13 @@ def load_text_search():
 
 @st.cache_resource
 def load_image_search():
+    if not CLIP_AVAILABLE:
+        return None, None, None, None, None
     clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
     clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
     clip_model.eval()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     clip_model = clip_model.to(device)
-
     image_index = faiss.read_index('embeddings/image_index.faiss')
     image_products = pd.read_pickle('embeddings/image_product_metadata.pkl')
     return clip_model, clip_processor, image_index, image_products, device

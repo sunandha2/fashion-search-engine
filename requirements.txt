@@ -4,10 +4,10 @@ pillow
 requests
 sentence-transformers==3.1.1
 faiss-cpu
-torch==2.1.0
-torchvision==0.16.0
-transformers==4.40.0
-tokenizers==0.19.1
+torch
+torchvision
+transformers==4.47.1
+tokenizers==0.21.0
 plotly
 streamlit==1.32.0
 groq
