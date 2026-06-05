@@ -1,14 +1,15 @@
 ---
-title: Streamlit Template Space
+title: Fashion Search Engine
 emoji: 🚀
 colorFrom: red
 colorTo: red
 sdk: docker
 app_port: 8501
 tags:
-  - streamlit
+- streamlit
 pinned: false
-short_description: Streamlit template space
+short_description: Multimodal fashion search — text + image + AI styling recomm
+license: mit
 ---
 
 # Welcome to Streamlit!
