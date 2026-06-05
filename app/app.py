@@ -14,7 +14,9 @@ warnings.filterwarnings('ignore')
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 load_dotenv()
-os.chdir(r'C:\Users\sunandha\Downloads\gitdemo\fashion-search-engine')
+# works both locally and on HF Spaces
+BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(BASE_PATH)
 
 st.set_page_config(
     page_title="Fashion Search Engine",
