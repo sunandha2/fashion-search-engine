@@ -183,8 +183,11 @@ def display_product_grid(results, cols=5):
             with col:
                 img_path = product.get('image_path', '')
                 if img_path and os.path.exists(img_path):
-                    img = Image.open(img_path).resize((200, 200))
-                    st.image(img, use_container_width=True)
+                    try:
+                        img = Image.open(img_path).resize((200, 200))
+                        st.image(img, use_container_width=True)
+                    except:
+                       st.image("https://placehold.co/200x200?text=Fashion", use_container_width=True)
                 else:
                     st.image(
                         "https://via.placeholder.com/200x200?text=No+Image",
