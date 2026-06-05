@@ -1,4 +1,14 @@
-<<<<<<< HEAD
+
+---
+title: Fashion Search Engine
+emoji: 👗
+colorFrom: purple
+colorTo: pink
+sdk: streamlit
+sdk_version: "1.32.0"
+app_file: app/app.py
+pinned: false
+---
 # Fashion Search Engine — Multimodal AI
 
 > Search by text OR upload an image.
@@ -58,4 +68,4 @@ Edit `/src/streamlit_app.py` to customize this app to your heart's desire. :hear
 
 If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
 forums](https://discuss.streamlit.io).
->>>>>>> 05bc4342e02d8619c97fd464e4bbebcbbd945afc
+
