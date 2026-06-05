@@ -1,13 +1,16 @@
 
 ---
+---
 title: Fashion Search Engine
 emoji: 👗
 colorFrom: purple
 colorTo: pink
 sdk: streamlit
 sdk_version: "1.32.0"
+python_version: "3.11"
 app_file: app/app.py
 pinned: false
+---
 ---
 # Fashion Search Engine — Multimodal AI
 
