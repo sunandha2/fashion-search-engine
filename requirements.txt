@@ -1,4 +1,3 @@
-cat > requirements.txt << 'EOF'
 pandas
 numpy
 pillow
@@ -13,4 +12,4 @@ streamlit
 groq
 python-dotenv
 tqdm
-EOF
+altair

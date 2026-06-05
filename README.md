@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Fashion Search Engine — Multimodal AI
 
 > Search by text OR upload an image.
@@ -36,3 +37,25 @@ Categories: Apparel, Footwear, Accessories, Beauty
 - [ ] Day 3 — CLIP image embeddings + multimodal search
 - [ ] Day 4 — RAG styling recommendations
 - [ ] Day 5 — Streamlit app + deployment
+=======
+---
+title: Fashion Search Engine
+emoji: 🚀
+colorFrom: red
+colorTo: red
+sdk: docker
+app_port: 8501
+tags:
+- streamlit
+pinned: false
+short_description: Multimodal fashion search — text + image + AI styling recomm
+license: mit
+---
+
+# Welcome to Streamlit!
+
+Edit `/src/streamlit_app.py` to customize this app to your heart's desire. :heart:
+
+If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
+forums](https://discuss.streamlit.io).
+>>>>>>> 05bc4342e02d8619c97fd464e4bbebcbbd945afc
