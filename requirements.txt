@@ -1,3 +1,4 @@
+cat > requirements.txt << 'EOF'
 pandas
 numpy
 pillow
@@ -6,9 +7,10 @@ sentence-transformers
 faiss-cpu
 torch
 torchvision
-transformers
+transformers==4.40.0
 plotly
 streamlit
 groq
 python-dotenv
 tqdm
+EOF
