@@ -31,6 +31,15 @@ def load_text_search():
     index = faiss.read_index(os.path.join(BASE_DIR, 'embeddings', 'text_index.faiss'))
     products = pd.read_pickle(os.path.join(BASE_DIR, 'embeddings', 'product_metadata.pkl'))
     return model, index, products
+@st.cache_resource
+def load_text_search():
+    path = os.path.join(BASE_DIR, 'embeddings', 'text_index.faiss')
+    st.write(f"Looking for: {path}")
+    st.write(f"Exists: {os.path.exists(path)}")
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    index = faiss.read_index(path)
+    products = pd.read_pickle(os.path.join(BASE_DIR, 'embeddings', 'product_metadata.pkl'))
+    return model, index, products
 
 @st.cache_resource
 def load_image_search():
