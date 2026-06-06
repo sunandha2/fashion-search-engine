@@ -14,7 +14,6 @@ warnings.filterwarnings('ignore')
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 load_dotenv()
-os.chdir(r'C:\Users\sunandha\Downloads\gitdemo\fashion-search-engine')
 
 st.set_page_config(
     page_title="Fashion Search Engine",
@@ -305,7 +304,7 @@ elif search_mode == "Upload Image":
                 st.info(rec)
 
         st.divider()
-        st.markdown(f"### 🛍️ Top {len(results)} Similar Products")
+        st.markdown(f"###  Top {len(results)} Similar Products")
         display_product_grid(results, cols=5)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
