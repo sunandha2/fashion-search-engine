@@ -1,6 +1,6 @@
 pandas
 numpy
-pillow==12.2.0
+pillow==11.0.0
 requests
 sentence-transformers==3.1.1
 faiss-cpu
@@ -9,7 +9,7 @@ torchvision
 transformers==4.47.1
 tokenizers==0.21.0
 plotly
-streamlit==1.32.0
+streamlit==1.40.0
 groq
 python-dotenv
 tqdm
