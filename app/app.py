@@ -3,11 +3,7 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 import torch
-try:
-    from transformers import CLIPProcessor, CLIPModel
-    CLIP_AVAILABLE = True
-except ImportError:
-    CLIP_AVAILABLE = False
+from transformers import CLIPProcessor, CLIPModel
 from sentence_transformers import SentenceTransformer
 import faiss
 import os
@@ -18,9 +14,7 @@ warnings.filterwarnings('ignore')
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 load_dotenv()
-# works both locally and on HF Spaces
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(BASE_PATH)
+os.chdir(r'C:\Users\sunandha\Downloads\gitdemo\fashion-search-engine')
 
 st.set_page_config(
     page_title="Fashion Search Engine",
@@ -31,24 +25,21 @@ st.set_page_config(
 # ── Load models + indexes (cached — runs once) ────────────────────────────────
 @st.cache_resource
 def load_text_search():
-    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     model = SentenceTransformer('all-MiniLM-L6-v2')
-    index = faiss.read_index(os.path.join(base, 'embeddings/text_index.faiss'))
-    products = pd.read_pickle(os.path.join(base, 'embeddings/product_metadata.pkl'))
+    index = faiss.read_index('embeddings/text_index.faiss')
+    products = pd.read_pickle('embeddings/product_metadata.pkl')
     return model, index, products
 
 @st.cache_resource
 def load_image_search():
-    if not CLIP_AVAILABLE:
-        return None, None, None, None, None
     clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
     clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
     clip_model.eval()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     clip_model = clip_model.to(device)
-    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    image_index = faiss.read_index(os.path.join(base, 'embeddings/image_index.faiss'))
-    image_products = pd.read_pickle(os.path.join(base, 'embeddings/image_product_metadata.pkl'))
+
+    image_index = faiss.read_index('embeddings/image_index.faiss')
+    image_products = pd.read_pickle('embeddings/image_product_metadata.pkl')
     return clip_model, clip_processor, image_index, image_products, device
 
 @st.cache_resource
@@ -110,7 +101,7 @@ def image_text_search(query, clip_model, clip_processor,
 
     with torch.no_grad():
         text_features = clip_model.get_text_features(**inputs)
-        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+        text_features = text_features / text_features.norm(p=2, dim=-1, keepdim=True)
 
     query_vec = text_features.cpu().numpy().astype(np.float32)
     scores, indices = image_index.search(query_vec, top_k)
@@ -129,8 +120,10 @@ def image_similarity_search(uploaded_image, clip_model, clip_processor,
     inputs = clip_processor(images=image, return_tensors="pt").to(device)
 
     with torch.no_grad():
-        features = clip_model.get_image_features(**inputs)
-        features = features / features.norm(dim=-1, keepdim=True)
+        outputs = clip_model.vision_model(**inputs)
+        features = outputs.pooler_output
+        features = clip_model.visual_projection(features)
+        features = features / features.norm(p=2, dim=-1, keepdim=True)
 
     query_vec = features.cpu().numpy().astype(np.float32)
     scores, indices = image_index.search(query_vec, top_k + 1)
@@ -196,12 +189,11 @@ def display_product_grid(results, cols=5):
                         img = Image.open(img_path).resize((200, 200))
                         st.image(img, use_container_width=True)
                     except:
-                       st.image("https://placehold.co/200x200?text=Fashion", use_container_width=True)
+                        st.image("https://placehold.co/200x200?text=Fashion",
+                                 use_container_width=True)
                 else:
-                    st.image(
-                        "https://via.placeholder.com/200x200?text=No+Image",
-                        use_container_width=True
-                    )
+                    st.image("https://placehold.co/200x200?text=Fashion",
+                             use_container_width=True)
                 name = product.get('productDisplayName', 'Unknown')
                 score = product.get('similarity_score', 0)
                 color = product.get('baseColour', '')
@@ -210,32 +202,34 @@ def display_product_grid(results, cols=5):
 
 
 # ── UI ────────────────────────────────────────────────────────────────────────
-st.title(" Fashion Search Engine")
+st.title("👗 Fashion Search Engine")
 st.markdown("*Semantic search + CLIP image search + AI styling recommendations*")
 st.divider()
 
-# Load everything
+# Load text search always
 with st.spinner("Loading models... (first run takes ~30 seconds)"):
     text_model, text_index, products = load_text_search()
     groq_client = load_groq()
 
+# Load image search only if index exists
 image_search_ready = False
 try:
     clip_model, clip_processor, image_index, image_products, device = load_image_search()
     image_search_ready = True
 except Exception:
-    st.warning("Image index not ready yet — run build_image_index.py first. Text search works!")
+    st.warning("⚠️ Image index not ready yet — run build_image_index.py first. Text search works!")
 
 st.success(f"Ready — {text_index.ntotal:,} products indexed")
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.header("⚙️ Settings")
-    search_mode = st.radio(
-        "Search Mode",
-        ["Text Search", "Visual Search (CLIP)", "Upload Image"],
-        index=0
-    )
+
+    search_options = ["Text Search"]
+    if image_search_ready:
+        search_options += ["Visual Search (CLIP)", "Upload Image"]
+
+    search_mode = st.radio("Search Mode", search_options, index=0)
     top_k = st.slider("Results to show", 5, 20, 10)
     show_recommendation = st.toggle("✨ AI Styling Recommendation", value=True)
 
@@ -244,7 +238,7 @@ with st.sidebar:
     if search_mode == "Text Search":
         st.info("Sentence Transformers + FAISS\n\nUnderstands meaning, not just keywords")
     elif search_mode == "Visual Search (CLIP)":
-        st.info("CLIP maps text and images to the same space — finds visually matching products")
+        st.info("CLIP maps text and images to the same space")
     else:
         st.info("Upload any clothing image — CLIP finds visually similar products")
 
@@ -267,16 +261,14 @@ if search_mode in ["Text Search", "Visual Search (CLIP)"]:
                         image_index, image_products, device, top_k
                     )
 
-            # Show recommendation first
             if show_recommendation:
                 with st.spinner("Getting styling recommendation..."):
                     rec = get_styling_recommendation(query, results, groq_client)
-
-                st.markdown("###  Stylist Recommendation")
+                st.markdown("### ✨ Stylist Recommendation")
                 st.info(rec)
                 st.divider()
 
-            st.markdown(f"###  Top {len(results)} Results")
+            st.markdown(f"### 🛍️ Top {len(results)} Results")
             st.caption(f"Mode: **{search_mode}** · Query: *{query}*")
             display_product_grid(results, cols=5)
 
@@ -304,16 +296,16 @@ elif search_mode == "Upload Image":
                 )
 
             if show_recommendation:
-                query_desc = f"products similar to the uploaded image"
+                query_desc = "products similar to the uploaded image"
                 with st.spinner("Getting styling recommendation..."):
                     rec = get_styling_recommendation(
                         query_desc, results, groq_client
                     )
-                st.markdown("###  Stylist Recommendation")
+                st.markdown("### ✨ Stylist Recommendation")
                 st.info(rec)
 
         st.divider()
-        st.markdown(f"### Top {len(results)} Similar Products")
+        st.markdown(f"### 🛍️ Top {len(results)} Similar Products")
         display_product_grid(results, cols=5)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
