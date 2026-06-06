@@ -22,11 +22,14 @@ st.set_page_config(
 )
 
 # ── Load models + indexes (cached — runs once) ────────────────────────────────
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 @st.cache_resource
 def load_text_search():
     model = SentenceTransformer('all-MiniLM-L6-v2')
-    index = faiss.read_index('embeddings/text_index.faiss')
-    products = pd.read_pickle('embeddings/product_metadata.pkl')
+    index = faiss.read_index(os.path.join(BASE_DIR, 'embeddings', 'text_index.faiss'))
+    products = pd.read_pickle(os.path.join(BASE_DIR, 'embeddings', 'product_metadata.pkl'))
     return model, index, products
 
 @st.cache_resource
@@ -37,8 +40,8 @@ def load_image_search():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     clip_model = clip_model.to(device)
 
-    image_index = faiss.read_index('embeddings/image_index.faiss')
-    image_products = pd.read_pickle('embeddings/image_product_metadata.pkl')
+    image_index = faiss.read_index(os.path.join(BASE_DIR, 'embeddings', 'image_index.faiss'))
+    image_products = pd.read_pickle(os.path.join(BASE_DIR, 'embeddings', 'image_product_metadata.pkl'))
     return clip_model, clip_processor, image_index, image_products, device
 
 @st.cache_resource
