@@ -1,0 +1,3 @@
+﻿embeddings/*.faiss binary
+embeddings/*.npy binary
+embeddings/*.pkl binary
