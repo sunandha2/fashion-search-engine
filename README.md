@@ -10,7 +10,7 @@ Python • FAISS • Sentence Transformers • OpenAI CLIP • Groq Llama 3.3 70
 # Demo
 ![### Semantic Search]](<Screenshot 2026-06-05 163252.png>)
 ![### CLIP Visual Search]](<Screenshot 2026-06-06 135311.png>)
-![### Upload Image Similarity Search](<Screenshot 2026-06-06 135428.png>)
+
 ## Problem
 Traditional keyword search fails when users describe products naturally.
 
@@ -36,7 +36,7 @@ This project combines semantic understanding and visual similarity search to imp
 6. Streamlit deployment
 
 ## System Architecture
-User Query
+User Queryage Similar
     │
     ▼
 Sentence Transformer / CLIP
