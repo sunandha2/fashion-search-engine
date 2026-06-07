@@ -8,9 +8,15 @@ Search 44,412 fashion products using natural language or images. Built using Sen
 ## Tech Stack
 Python • FAISS • Sentence Transformers • OpenAI CLIP • Groq Llama 3.3 70B • RAG • Streamlit
 # Demo
-![### Semantic Search]](<Screenshot 2026-06-05 163252.png>)
-![### CLIP Visual Search]](<Screenshot 2026-06-06 135311.png>)
+## Screenshots
 
+### Semantic Search
+
+![Semantic Search](images/semantic-search.png)
+
+### CLIP Visual Search
+
+![CLIP Visual Search](images/clip-visual-search.png)
 ## Problem
 Traditional keyword search fails when users describe products naturally.
 
